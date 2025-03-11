@@ -6,8 +6,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Post\StoreRequest;
 use App\Http\Resources\Post\PostResource;
+use App\Models\Post;
 use App\Services\PostService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class PostController extends Controller
 {
@@ -17,9 +19,10 @@ class PostController extends Controller
     {
     }
 
-    public function index()
+    public function index(): ResourceCollection
     {
-        //
+        $posts = Post::where('user_id', auth()->id())->latest()->get();
+        return PostResource::collection($posts);
     }
 
     public function store(StoreRequest $request): PostResource

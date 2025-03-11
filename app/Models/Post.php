@@ -35,4 +35,9 @@ class Post extends Model
     {
         return $this->hasOne(PostImage::class);
     }
+
+    public function getDateAttribute()
+    {
+        return $this->created_at->diffForHumans();
+    }
 }
