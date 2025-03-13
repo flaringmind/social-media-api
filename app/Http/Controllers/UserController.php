@@ -40,7 +40,7 @@ class UserController extends Controller
             ->additional(['user_name' => $user->name]);
     }
 
-    public function toggleFollowing(User $user)
+    public function toggleFollowing(User $user): array
     {
         $res = auth()->user()->followings()->toggle($user->id);
         $data['is_followed'] = count($res['attached']) > 0;

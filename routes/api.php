@@ -19,4 +19,5 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/posts', [PostController::class, 'index']);
     Route::post('/posts', [PostController::class, 'store']);
     Route::post('/post_images', [PostImageController::class, 'store']);
+    Route::get('/posts/{post}/toggle_like', [PostController::class, 'toggleLike']);
 });

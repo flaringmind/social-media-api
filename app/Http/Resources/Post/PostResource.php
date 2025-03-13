@@ -20,6 +20,7 @@ class PostResource extends JsonResource
             'content' => $this->content,
             'image_url' => $this->postImage?->url,
             'date' => $this->getDateAttribute(),
+            'is_liked' => $this->isLiked ?? false
         ];
     }
 }
