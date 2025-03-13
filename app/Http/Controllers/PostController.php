@@ -6,8 +6,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Post\StoreRequest;
 use App\Http\Resources\Post\PostResource;
-use App\Models\LikedPost;
 use App\Models\Post;
+use App\Models\User;
 use App\Services\PostService;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
@@ -21,17 +21,22 @@ class PostController extends Controller
 
     public function index(): ResourceCollection
     {
-        $posts = Post::where('user_id', auth()->id())->latest()->get();
+        $posts = $this->postService->listMyPosts();
 
+        return PostResource::collection($posts);
+    }
 
-        $likedPostIds = LikedPost::where('user_id', auth()->id())
-            ->pluck('post_id')->toArray();
-        foreach ($posts as $post) {
-            if (in_array($post->id, $likedPostIds)) {
-                $post->isLiked = true;
-            }
-        }
+    public function creatorPosts(User $user): ResourceCollection
+    {
+        $posts = $this->postService->listCurrentUserPosts($user);
 
+        return PostResource::collection($posts)
+            ->additional(['user_name' => $user->name]);
+    }
+
+    public function followingPosts(): ResourceCollection
+    {
+        $posts = $this->postService->listFollowingPosts();
 
         return PostResource::collection($posts);
     }
@@ -45,6 +50,7 @@ class PostController extends Controller
     {
         $res = auth()->user()->likedPosts()->toggle($post->id);
         $data['is_liked'] = count($res['attached']) > 0;
+        $data['likes_count'] = $post->likes()->count();
 
         return $data;
     }
