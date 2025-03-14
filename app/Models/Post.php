@@ -32,12 +32,17 @@ class Post extends Model
 {
     protected $guarded = [];
 
-    protected $with = ['postImage', 'repostedPost'];
+    protected $with = ['postImage', 'repostedPost', 'user'];
     protected $withCount = ['likes', 'comments'];
 
     public function postImage(): HasOne
     {
         return $this->hasOne(PostImage::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function likes(): BelongsToMany
