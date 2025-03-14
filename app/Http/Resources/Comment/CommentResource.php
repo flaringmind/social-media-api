@@ -19,6 +19,7 @@ class CommentResource extends JsonResource
             'id' => $this->id,
             'body' => $this->body,
             'date' => $this->getDateAttribute(),
+            'replied_to_user' => $this->parent?->user?->name,
             'user' => new UserResource($this->user),
         ];
     }

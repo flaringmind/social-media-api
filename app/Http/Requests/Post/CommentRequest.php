@@ -23,6 +23,7 @@ class CommentRequest extends FormRequest
     {
         return [
             'body' => 'bail|required|string|max:255',
+            'parent_id' => 'nullable|bail|integer|exists:comments,id',
         ];
     }
 }

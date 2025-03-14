@@ -28,11 +28,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Comment extends Model
 {
     protected $guarded = [];
-    protected $with = ['user'];
+    protected $with = ['user', 'parent'];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(Comment::class, 'parent_id', 'id');
     }
 
     public function getDateAttribute(): string
