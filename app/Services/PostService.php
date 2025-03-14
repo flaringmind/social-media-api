@@ -57,13 +57,13 @@ class PostService
 
     public function listMyPosts(): Collection
     {
-        $posts = Post::where('user_id', auth()->id())->latest()->get();
+        $posts = Post::where('user_id', auth()->id())->withCount('reposts')->latest()->get();
         return $mappedPosts = $this->mapPostsLikedByUser($posts);
     }
 
     public function listCurrentUserPosts(User $user): Collection
     {
-        $posts = $user->posts()->latest()->get();
+        $posts = $user->posts()->withCount('reposts')->latest()->get();
         return $mappedPosts = $this->mapPostsLikedByUser($posts);
     }
 
@@ -73,7 +73,7 @@ class PostService
         $likedPostIds = LikedPost::where('user_id', auth()->id())
             ->pluck('post_id')->toArray();
         return Post::whereIn('user_id', $followedIds)
-            ->whereNotIn('id', $likedPostIds)->latest()->get();
+            ->whereNotIn('id', $likedPostIds)->withCount('reposts')->latest()->get();
     }
 
 }

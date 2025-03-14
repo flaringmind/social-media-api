@@ -22,8 +22,9 @@ class PostResource extends JsonResource
             'date' => $this->getDateAttribute(),
             'is_liked' => $this->isLiked ?? false,
             'likes_count' => $this->likes_count,
-            'reposted_post' => new RepostedPostResource($this->repostedPost),
             'comments_count' => $this->comments_count,
+            'reposts_count' => $this->reposts_count,
+            'reposted_post' => new RepostedPostResource($this->repostedPost),
         ];
     }
 }

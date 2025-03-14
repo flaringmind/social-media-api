@@ -32,7 +32,7 @@ class Post extends Model
 {
     protected $guarded = [];
 
-    protected $with = ['postImage', 'likes', 'repostedPost'];
+    protected $with = ['postImage', 'repostedPost'];
     protected $withCount = ['likes', 'comments'];
 
     public function postImage(): HasOne
@@ -42,20 +42,22 @@ class Post extends Model
 
     public function likes(): BelongsToMany
     {
-        return $this->belongsToMany(User::class,
-            'liked_posts', 'post_id', 'user_id');
+        return $this->belongsToMany(User::class,'liked_posts', 'post_id', 'user_id');
     }
 
     public function repostedPost(): BelongsTo
     {
-        return $this->belongsTo(Post::class,
-            'reposted_id', 'id');
+        return $this->belongsTo(Post::class, 'reposted_id', 'id');
+    }
+
+    public function reposts(): HasMany
+    {
+        return $this->hasMany(Post::class, 'reposted_id', 'id');
     }
 
     public function comments(): HasMany
     {
-        return $this->hasMany(Comment::class,
-            'post_id', 'id');
+        return $this->hasMany(Comment::class, 'post_id', 'id');
     }
 
     public function getDateAttribute(): string
