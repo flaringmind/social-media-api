@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
@@ -32,6 +33,7 @@ class Post extends Model
     protected $guarded = [];
 
     protected $with = ['postImage', 'likes', 'repostedPost'];
+    protected $withCount = ['likes', 'comments'];
 
     public function postImage(): HasOne
     {
@@ -48,6 +50,12 @@ class Post extends Model
     {
         return $this->belongsTo(Post::class,
             'reposted_id', 'id');
+    }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class,
+            'post_id', 'id');
     }
 
     public function getDateAttribute(): string
