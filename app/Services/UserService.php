@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Models\LikedPost;
 use App\Models\SubscriberFollowing;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
@@ -21,6 +22,18 @@ class UserService
             }
         }
         return $users;
+    }
+
+    public function getStats(User $user): array
+    {
+        $result = [];
+        $result['subscribers_count'] = SubscriberFollowing::where('following_id', $user->id)->count();
+        $result['followings_count'] = SubscriberFollowing::where('subscriber_id', $user->id)->count();
+        $postIds = $user->posts->pluck('id')->toArray();
+        $result['posts_count'] = count($postIds);
+        $result['likes_count'] = LikedPost::whereIn('post_id', $postIds)->count();
+
+        return $result;
     }
 
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Resources\User\UserResource;
+use App\Models\SubscriberFollowing;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -28,5 +29,12 @@ class UserController extends Controller
         $data['is_followed'] = count($res['attached']) > 0;
 
         return $data;
+    }
+
+    public function getStats(User $user)
+    {
+        $result = $this->userService->getStats($user);
+
+        return response()->json(['data' => $result]);
     }
 }
