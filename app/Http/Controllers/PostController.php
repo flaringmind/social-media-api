@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Post\RepostRequest;
 use App\Http\Requests\Post\StoreRequest;
 use App\Http\Resources\Post\PostResource;
 use App\Models\Post;
@@ -55,4 +56,11 @@ class PostController extends Controller
         return $data;
     }
 
+    public function repost(RepostRequest $request, Post $post): void
+    {
+        $data = $request->validated();
+        $data['user_id'] = auth()->id();
+        $data['reposted_id'] = $post->id;
+        Post::create($data);
+    }
 }
